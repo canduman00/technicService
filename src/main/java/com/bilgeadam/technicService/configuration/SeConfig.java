@@ -14,10 +14,13 @@ public class SeConfig {
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http, @Autowired AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		
-		http.authorizeHttpRequests(customizer -> customizer.anyRequest().permitAll());
+		//http.authorizeHttpRequests(customizer -> customizer.anyRequest().permitAll());
+		http.authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated());
 		http.csrf(customizer -> customizer.disable());
 		http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
+		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()));
+		http.addFilterAfter(new JWTAuthorizationFilter(), JWTAuthenticationFilter.class);
 		return http.build();
 	}
 }
