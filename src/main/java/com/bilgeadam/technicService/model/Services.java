@@ -2,18 +2,18 @@ package com.bilgeadam.technicService.model;
 
 public class Services {
 	
-	int id;
+	long id;
 	String service;
-	String desktop;
-	String laptop;
-	String mac;
-	int duration;
+	long desktop;
+	long laptop;
+	long mac;
+	long duration;
 	
 	public Services() {
 		
 	}
 	
-	public Services(int id, String service, String desktop, String laptop, String mac, int duration) {
+	public Services(long id, String service, long desktop, long laptop, long mac, long duration) {
 		this.id = id;
 		this.service = service;
 		this.desktop = desktop;
@@ -22,11 +22,11 @@ public class Services {
 		this.duration = duration;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -38,35 +38,35 @@ public class Services {
 		this.service = service;
 	}
 
-	public String getDesktop() {
+	public long getDesktop() {
 		return desktop;
 	}
 
-	public void setDesktop(String desktop) {
+	public void setDesktop(long desktop) {
 		this.desktop = desktop;
 	}
 
-	public String getLaptop() {
+	public long getLaptop() {
 		return laptop;
 	}
 
-	public void setLaptop(String laptop) {
+	public void setLaptop(long laptop) {
 		this.laptop = laptop;
 	}
 
-	public String getMac() {
+	public long getMac() {
 		return mac;
 	}
 
-	public void setMac(String mac) {
+	public void setMac(long mac) {
 		this.mac = mac;
 	}
 
-	public int getDuration() {
+	public long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(long duration) {
 		this.duration = duration;
 	}
 	

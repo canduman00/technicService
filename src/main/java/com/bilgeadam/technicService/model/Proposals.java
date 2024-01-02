@@ -1,18 +1,18 @@
 package com.bilgeadam.technicService.model;
 
 public class Proposals {
-	int id;
+	long id;
 	String username;
 	String product_type;
 	String product_note;
-	int price;
+	long price;
 	String status;
 	
 	public Proposals() {
 		
 	}
 
-	public Proposals(int id, String username, String product_type, String product_note, int price, String status) {
+	public Proposals(long id, String username, String product_type, String product_note, long price, String status) {
 		this.id = id;
 		this.username = username;
 		this.product_type = product_type;
@@ -21,11 +21,11 @@ public class Proposals {
 		this.status = status;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -53,11 +53,11 @@ public class Proposals {
 		this.product_note = product_note;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 

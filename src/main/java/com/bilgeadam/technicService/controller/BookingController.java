@@ -2,10 +2,11 @@ package com.bilgeadam.technicService.controller;
 
 import java.util.List;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,11 +29,11 @@ public class BookingController {
 	}
 	
 	
+	//Booking control - admin parts
+	
 	@GetMapping(path = "/admin/getall", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Booking>> getall(){
-		
 		return ResponseEntity.ok(bookingRepo.getall());
-		
 	}
 	
 	@GetMapping(path = "/admin/like", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,6 +75,24 @@ public class BookingController {
 		}
 		catch(Exception e) {
 			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+	
+	//Booking - user parts
+	
+	@PostMapping(path = "/user/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> save(@RequestBody Booking booking){
+		try {
+			boolean result = bookingRepo.save(booking);
+			if(result) {
+				return ResponseEntity.ok().body("booking successful");
+			}
+			else {
+				return ResponseEntity.internalServerError().body("booking error");
+			}
+		}
+		catch(Exception e) {
+			return ResponseEntity.internalServerError().body("booking error, catch ---" + e.getMessage() + "---" +  e.getLocalizedMessage() + "---" + e.getClass());
 		}
 	}
 	

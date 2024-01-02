@@ -1,27 +1,27 @@
 package com.bilgeadam.technicService.model;
 
 public class Sale {
-	int id;
+	long id;
 	String product_type;
 	String product_note;
-	int price;
+	long price;
 	
 	public Sale() {
 		
 	}
 
-	public Sale(int id, String product_type, String product_note, int price) {
+	public Sale(long id, String product_type, String product_note, long price) {
 		this.id = id;
 		this.product_type = product_type;
 		this.product_note = product_note;
 		this.price = price;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -41,11 +41,11 @@ public class Sale {
 		this.product_note = product_note;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 	

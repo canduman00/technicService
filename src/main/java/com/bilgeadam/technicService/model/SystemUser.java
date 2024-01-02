@@ -2,7 +2,7 @@ package com.bilgeadam.technicService.model;
 
 public class SystemUser {
 	
-	int id;
+	long id;
 	String username = "";
 	String password = "";
 	String mail = "";

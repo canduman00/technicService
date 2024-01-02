@@ -3,36 +3,36 @@ package com.bilgeadam.technicService.model;
 import java.time.LocalDate;
 
 public class Booking {
-	int booking_id;
+	long booking_id;
 	String username;
-	int service_id;
+	long service_id;
 	String device;
-	String optional_note;
-	LocalDate date;
-	int price;
+	String optional_note = "";
+	LocalDate booking_date;
+	long price;
 	String status;
 	
 	public Booking() {
 		
 	}
 
-	public Booking(int booking_id, String username, int service_id, String device, String optional_note, LocalDate date,
-			int price, String status) {
+	public Booking(long booking_id, String username, long service_id, String device, String optional_note, LocalDate date,
+			long price, String status) {
 		this.booking_id = booking_id;
 		this.username = username;
 		this.service_id = service_id;
 		this.device = device;
 		this.optional_note = optional_note;
-		this.date = date;
+		this.booking_date = date;
 		this.price = price;
 		this.status = status;
 	}
 
-	public int getBooking_id() {
+	public long getBooking_id() {
 		return booking_id;
 	}
 
-	public void setBooking_id(int booking_id) {
+	public void setBooking_id(long booking_id) {
 		this.booking_id = booking_id;
 	}
 
@@ -44,11 +44,11 @@ public class Booking {
 		this.username = username;
 	}
 
-	public int getService_id() {
+	public long getService_id() {
 		return service_id;
 	}
 
-	public void setService_id(int service_id) {
+	public void setService_id(long service_id) {
 		this.service_id = service_id;
 	}
 
@@ -69,18 +69,18 @@ public class Booking {
 	}
 
 	public LocalDate getDate() {
-		return date;
+		return booking_date;
 	}
 
 	public void setDate(LocalDate date) {
-		this.date = date;
+		this.booking_date = date;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
@@ -90,6 +90,13 @@ public class Booking {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Booking [booking_id=" + booking_id + ", username=" + username + ", service_id=" + service_id
+				+ ", device=" + device + ", optional_note=" + optional_note + ", date=" + booking_date + ", price=" + price
+				+ ", status=" + status + "]";
 	}
 	
 	

@@ -3,20 +3,20 @@ package com.bilgeadam.technicService.model;
 import java.time.LocalDate;
 
 public class Sale_log {
-	int sale_id;
-	int user_id;
+	long sale_id;
+	long user_id;
 	String credit_card;
 	LocalDate date;
 	String product_type;
 	String product_note;
-	int price;
+	long price;
 	
 	public Sale_log() {
 		
 	}
 
-	public Sale_log(int sale_id, int user_id, String credit_card, LocalDate date, String product_type,
-			String product_note, int price) {
+	public Sale_log(long sale_id, long user_id, String credit_card, LocalDate date, String product_type,
+			String product_note, long price) {
 		this.sale_id = sale_id;
 		this.user_id = user_id;
 		this.credit_card = credit_card;
@@ -26,19 +26,19 @@ public class Sale_log {
 		this.price = price;
 	}
 
-	public int getSale_id() {
+	public long getSale_id() {
 		return sale_id;
 	}
 
-	public void setSale_id(int sale_id) {
+	public void setSale_id(long sale_id) {
 		this.sale_id = sale_id;
 	}
 
-	public int getUser_id() {
+	public long getUser_id() {
 		return user_id;
 	}
 
-	public void setUser_id(int user_id) {
+	public void setUser_id(long user_id) {
 		this.user_id = user_id;
 	}
 
@@ -74,11 +74,11 @@ public class Sale_log {
 		this.product_note = product_note;
 	}
 
-	public int getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 	
