@@ -1,6 +1,8 @@
 package com.bilgeadam.technicService.repository;
 
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,24 +52,28 @@ public class BookingRepository {
 	
 	//Booking - user parts
 	
-	public boolean save(Booking booking) {
-		
-		//getting authenticated username
+	//getting authenticated username
+	public String getSessionName() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipal = auth.getName();
-		
+		return auth.getName();
+	}
+	
+	
+	public String save(Booking booking) {
+		String currentPrincipal = getSessionName(); 
+
 		Services services = servicesRepo.getbyid(booking.getService_id());
 		
-		
 		//booking date function
-		LocalDate date = LocalDate.now();
+		LocalDate date = LocalDate.now(); 
+				
 		String date_sql = "select sum(\"duration\") from \"BOOKING\" where \"booking_date\" = :date";
 		Map<String, Object> paramMap = new HashMap<>();
 		while(true) {
 			paramMap.put("date", date);
 			Object sum = namedParameterJdbcTemplate.queryForObject(date_sql, paramMap, Long.class);
 			long sum2 = sum == null ? 0 : (long) sum;
-			if((sum2 + services.getDuration()) >= 10 ) {
+			if((sum2 + services.getDuration()) > 10 ) {
 				date = date.plusDays(1);
 			}
 			else {
@@ -85,12 +91,28 @@ public class BookingRepository {
 		paramMap.put("device", booking.getDevice());
 		paramMap.put("optional_note", booking.getOptional_note());
 		paramMap.put("booking_date", date);
-		paramMap.put("price", servicesRepo.getbydevice(booking.getDevice(), booking.getService_id()));
+		long price = servicesRepo.getbydevice(booking.getDevice().toLowerCase(), booking.getService_id());
+		paramMap.put("price", price);
 		paramMap.put("duration", services.getDuration());
+				
+		namedParameterJdbcTemplate.update(booking_sql, paramMap);
 		
-		return namedParameterJdbcTemplate.update(booking_sql, paramMap) == 1;
+		return "Your booking generated on " + date + " with the price of " + price;
 		
+		
+		}
+	
+		//delete booking by id
+		
+		public boolean deletebyid(long id) {
+			String sql = "delete from \"BOOKING\" where \"booking_id\" = :id AND \"username\" = :username";
+			Map<String, Object> paramMap = new HashMap<>();
+			paramMap.put("id", id);
+			paramMap.put("username", getSessionName());
+			return namedParameterJdbcTemplate.update(sql, paramMap) == 1;
+		}
+	
 		
 	}
 	
-}
+

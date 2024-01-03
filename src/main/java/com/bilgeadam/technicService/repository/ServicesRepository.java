@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,11 +33,14 @@ public class ServicesRepository {
 	}
 	
 	public long getbydevice(String device, long id) {
-		String sql = "select :device from \"SERVICES\" where \"ID\"=:id";
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("device", device.toLowerCase());
-		paramMap.put("id", id);
-		return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
+		
+			String sql = "select \""+ device +"\" from \"SERVICES\" where \"ID\"=:id";
+			Map<String, Object> paramMap = new HashMap<>();
+			//paramMap.put("device", device);
+			paramMap.put("id", id);
+			return namedParameterJdbcTemplate.queryForObject(sql, paramMap, Long.class);
+		
+		
 		
 	}
 	

@@ -1,6 +1,6 @@
 package com.bilgeadam.technicService.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Booking {
 	long booking_id;
@@ -8,7 +8,7 @@ public class Booking {
 	long service_id;
 	String device;
 	String optional_note = "";
-	LocalDate booking_date;
+	Date booking_date;
 	long price;
 	String status;
 	
@@ -16,14 +16,14 @@ public class Booking {
 		
 	}
 
-	public Booking(long booking_id, String username, long service_id, String device, String optional_note, LocalDate date,
+	public Booking(long booking_id, String username, long service_id, String device, String optional_note, Date booking_date,
 			long price, String status) {
 		this.booking_id = booking_id;
 		this.username = username;
 		this.service_id = service_id;
 		this.device = device;
 		this.optional_note = optional_note;
-		this.booking_date = date;
+		this.booking_date = booking_date;
 		this.price = price;
 		this.status = status;
 	}
@@ -68,11 +68,11 @@ public class Booking {
 		this.optional_note = optional_note;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return booking_date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.booking_date = date;
 	}
 
