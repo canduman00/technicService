@@ -1,6 +1,7 @@
 package com.bilgeadam.technicService.model;
 
 public class Proposals {
+
 	long id;
 	String username;
 	String product_type;
@@ -67,6 +68,11 @@ public class Proposals {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	@Override
+	public String toString() {
+		return "Proposals [id=" + id + ", username=" + username + ", product_type=" + product_type + ", product_note="
+				+ product_note + ", price=" + price + ", status=" + status + "]";
 	}
 	
 }

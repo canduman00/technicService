@@ -34,3 +34,4 @@ build/
 ### VS Code ###
 .vscode/
 .mvn
+src/main/java/com/bilgeadam/technicService/controller/testController.java
