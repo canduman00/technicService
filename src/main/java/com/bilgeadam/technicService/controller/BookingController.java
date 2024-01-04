@@ -1,7 +1,10 @@
 package com.bilgeadam.technicService.controller;
 
 import java.util.List;
+import java.util.Locale;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,10 +29,12 @@ public class BookingController {
 	
 	private BookingRepository bookingRepo;
 	private UserRepository userRepo;
+	private final MessageSource messageSource;
 	
-	public BookingController(BookingRepository bookingRepo, UserRepository userRepo) {
+	public BookingController(BookingRepository bookingRepo, UserRepository userRepo, ResourceBundleMessageSource messageSource) {
 		this.bookingRepo = bookingRepo;
 		this.userRepo = userRepo;
+		this.messageSource = messageSource;
 	}
 	
 	
@@ -41,12 +46,14 @@ public class BookingController {
 	}
 	
 	@GetMapping(path = "/admin/like", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getlike(@RequestParam(name="username")String username){
+	public ResponseEntity<Object> getlike(Locale locale,@RequestParam(name="username")String username){
 		
 		try {
 			List<Booking> result = bookingRepo.getlike(username);
 			if(result.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("couldn't find a booking reservation under " + username);
+				Object[] params = new Object[1];
+				params[0] = username;
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage("booking.getlike.fail", params, locale));
 			}
 			else {
 				return ResponseEntity.ok(result);
@@ -54,26 +61,29 @@ public class BookingController {
 		}
 
 		catch(Exception e) {
-			return ResponseEntity.internalServerError().body("server error ---> " + e.getMessage() + e.getLocalizedMessage());
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.error", null, locale) + e.getMessage() + e.getLocalizedMessage());
 		}
 		
 	}
 	
 	@PostMapping(path = "/admin/updatebookingbyid/{id}", consumes = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<String> updatestatus(@PathVariable(name="id")long booking_id, @RequestBody String status){
+	public ResponseEntity<String> updatestatus(Locale locale, @PathVariable(name="id")long booking_id, @RequestBody String status){
 		try {
 			boolean result;
 			if(status.toUpperCase().equals("COMPLETED") || status.toUpperCase().equals("REPAIRING")) {
 				result = bookingRepo.updatestatus(booking_id, status.toUpperCase());
 			}
 			else {
-				return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("status should be either 'REPAIRING' or 'COMPLETED'");
+				return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(messageSource.getMessage("booking.update.fail", null, locale));
 			}
 			if(result) {
-				return ResponseEntity.ok("booking_id " + booking_id+  " status changed into " + status.toUpperCase());
+				Object[] params = new Object[2];
+				params[0] = booking_id;
+				params[1] = status.toUpperCase();
+				return ResponseEntity.ok(messageSource.getMessage("booking.update.success", params, locale));
 			}
 			else {
-				return ResponseEntity.internalServerError().body("status update error, check booking_id or status");
+				return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.update.error", null, locale));
 			}
 			
 		}
@@ -85,52 +95,56 @@ public class BookingController {
 	//Booking - user parts
 	
 	@PostMapping(path = "/user/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> save(@RequestBody Booking booking){
+	public ResponseEntity<String> save(Locale locale,@RequestBody Booking booking){
 		try {
-			return ResponseEntity.ok().body(bookingRepo.save(booking));
+			return ResponseEntity.ok().body(bookingRepo.save(locale,booking));
 
 		}
 		catch(BadSqlGrammarException e) {
-			return ResponseEntity.internalServerError().body("incorrect device type");
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.save.device.fail", null, locale));
 		}
 		catch(EmptyResultDataAccessException e) {
-			return ResponseEntity.internalServerError().body("incorrect service choice");
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.save.service.fail", null, locale));
 		}
 		catch(Exception e) {
-			return ResponseEntity.internalServerError().body("booking error, catch ---" + e.getMessage() + "---" +  e.getLocalizedMessage() + "---" + e.getClass());
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.error", null, locale) + e.getMessage() + "---" +  e.getLocalizedMessage() + "---" + e.getClass());
 		}
 	}
 	
 	@GetMapping(path = "/user/mybookings", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getuserbookings() {
+	public ResponseEntity<Object> getuserbookings(Locale locale) {
 		try {
 			String username = userRepo.getSessionName();
 			List<Booking> result = bookingRepo.getlike(username);
 			if(result.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("couldn't find a booking reservation under " + username);
+				Object[] params = new Object[1];
+				params[0] = username;
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage("booking.getlike.fail",params, locale));
 			}
 			else {
 				return ResponseEntity.ok(result);
 			}
 		}
 		catch(Exception e) {
-			return ResponseEntity.internalServerError().body("service error -->" + e.getMessage());
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.error", null,locale) + e.getMessage());
 		}
 	}
 	
 	@DeleteMapping(path = "/user/deletebyid/{id}")
-	public ResponseEntity<String> deletebyid(@PathVariable(name="id")long id){
+	public ResponseEntity<String> deletebyid(Locale locale, @PathVariable(name="id")long id){
 		try {
 			boolean result = bookingRepo.deletebyid(id);
+			Object[] params = new Object[1];
+			params[0] = id;
 			if(result) {
-				return ResponseEntity.ok("booking " + id + " is deleted");
+				return ResponseEntity.ok(messageSource.getMessage("booking.delete.success", params, locale));
 			}
 			else {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("booking " + id + " not found");
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageSource.getMessage("booking.delete.fail", params, locale));
 			}
 		}
 		catch(Exception e) {
-			return ResponseEntity.internalServerError().body("server error " + e.getMessage());
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.error", null, locale) + e.getMessage());
 		}
 	}
 	

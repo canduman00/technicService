@@ -5,8 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.Authentication;
@@ -22,11 +25,13 @@ public class BookingRepository {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private ServicesRepository servicesRepo;
 	private UserRepository userRepo;
+	private final MessageSource messageSource;
 	
-	public BookingRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ServicesRepository servicesRepo, UserRepository userRepo){
+	public BookingRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ServicesRepository servicesRepo, UserRepository userRepo, ResourceBundleMessageSource messageSource){
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.servicesRepo = servicesRepo;
 		this.userRepo = userRepo;
+		this.messageSource = messageSource;
 	}
 	
 	//Booking control - admin parts
@@ -61,10 +66,11 @@ public class BookingRepository {
 	}*/
 	
 	
-	public String save(Booking booking) {
+	public String save(Locale locale,Booking booking) {
 		String currentPrincipal = userRepo.getSessionName(); 
-
 		Services services = servicesRepo.getbyid(booking.getService_id());
+		
+		
 		
 		//booking date function
 		LocalDate date = LocalDate.now(); 
@@ -99,7 +105,13 @@ public class BookingRepository {
 				
 		namedParameterJdbcTemplate.update(booking_sql, paramMap);
 		
-		return "Your booking generated on " + date + " with the price of " + price;
+		//internationalizaton
+		Object[] params = new Object[2];
+		params[0] = date;
+		params[1] = price;
+		
+		return messageSource.getMessage("bookrepo.save.success", params ,locale);
+		//return "Your booking generated on " + date + " with the price of " + price;
 		
 		
 		}

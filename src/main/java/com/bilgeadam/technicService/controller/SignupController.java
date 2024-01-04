@@ -1,5 +1,9 @@
 package com.bilgeadam.technicService.controller;
 
+import java.util.Locale;
+
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,25 +19,27 @@ import com.bilgeadam.technicService.repository.UserRepository;
 public class SignupController {
 	
 	private UserRepository userRepository;
+	private final MessageSource messageSource;
 	
-	public SignupController(UserRepository userRepository) {
+	public SignupController(UserRepository userRepository, ResourceBundleMessageSource messageSource) {
 		this.userRepository = userRepository;
+		this.messageSource = messageSource;
 		
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> signup(@RequestBody SystemUser systemUser){
+	public ResponseEntity<String> signup(Locale locale,@RequestBody SystemUser systemUser){
 		try {
 			boolean result = userRepository.signup(systemUser);
 			if(result) {
-				return ResponseEntity.ok("kayit basari ile tamamlandi");
+				return ResponseEntity.ok(messageSource.getMessage("signup.save.success", null,locale));
 			}
 			else {
-				return ResponseEntity.internalServerError().body("kayit gerceklestirilemedi");
+				return ResponseEntity.internalServerError().body(messageSource.getMessage("signup.save.fail",null, locale));
 			}
 		}
 		catch(Exception e) {
-			return ResponseEntity.internalServerError().body("kayit sirasinda bir hata olustu -->" + e.getMessage());
+			return ResponseEntity.internalServerError().body(messageSource.getMessage("signup.save.error",null, locale) + e.getMessage());
 		}
 	}
 
