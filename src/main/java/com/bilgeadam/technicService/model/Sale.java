@@ -49,5 +49,11 @@ public class Sale {
 		this.price = price;
 	}
 	
+	@Override
+	public String toString() {
+		return "Sale [product_type=" + product_type + ", product_note=" + product_note + ", price="
+				+ price + "]";
+	}
+	
 	
 }

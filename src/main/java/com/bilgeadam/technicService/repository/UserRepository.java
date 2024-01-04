@@ -7,7 +7,9 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,13 @@ public class UserRepository {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.passwordEncoder = passwordEncoder;
 	}
+	
+	
+	public String getSessionName() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth.getName();
+	}
+	
 	
 	public boolean signup(SystemUser systemUser) {
 		String sql = "insert into \"USERS\"(\"username\", \"password\", \"mail\") "

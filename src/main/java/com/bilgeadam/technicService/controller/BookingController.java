@@ -18,15 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bilgeadam.technicService.model.Booking;
 import com.bilgeadam.technicService.repository.BookingRepository;
+import com.bilgeadam.technicService.repository.UserRepository;
 
 @RestController
 @RequestMapping(path = "/booking")
 public class BookingController {
 	
 	private BookingRepository bookingRepo;
+	private UserRepository userRepo;
 	
-	public BookingController(BookingRepository bookingRepo) {
+	public BookingController(BookingRepository bookingRepo, UserRepository userRepo) {
 		this.bookingRepo = bookingRepo;
+		this.userRepo = userRepo;
 	}
 	
 	
@@ -101,7 +104,7 @@ public class BookingController {
 	@GetMapping(path = "/user/mybookings", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getuserbookings() {
 		try {
-			String username = bookingRepo.getSessionName();
+			String username = userRepo.getSessionName();
 			List<Booking> result = bookingRepo.getlike(username);
 			if(result.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("couldn't find a booking reservation under " + username);

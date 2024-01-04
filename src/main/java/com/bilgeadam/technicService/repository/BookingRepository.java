@@ -21,10 +21,12 @@ public class BookingRepository {
 	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private ServicesRepository servicesRepo;
+	private UserRepository userRepo;
 	
-	public BookingRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ServicesRepository servicesRepo){
+	public BookingRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ServicesRepository servicesRepo, UserRepository userRepo){
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.servicesRepo = servicesRepo;
+		this.userRepo = userRepo;
 	}
 	
 	//Booking control - admin parts
@@ -53,14 +55,14 @@ public class BookingRepository {
 	//Booking - user parts
 	
 	//getting authenticated username
-	public String getSessionName() {
+	/*public String getSessionName() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return auth.getName();
-	}
+	}*/
 	
 	
 	public String save(Booking booking) {
-		String currentPrincipal = getSessionName(); 
+		String currentPrincipal = userRepo.getSessionName(); 
 
 		Services services = servicesRepo.getbyid(booking.getService_id());
 		
@@ -108,7 +110,7 @@ public class BookingRepository {
 			String sql = "delete from \"BOOKING\" where \"booking_id\" = :id AND \"username\" = :username";
 			Map<String, Object> paramMap = new HashMap<>();
 			paramMap.put("id", id);
-			paramMap.put("username", getSessionName());
+			paramMap.put("username", userRepo.getSessionName());
 			return namedParameterJdbcTemplate.update(sql, paramMap) == 1;
 		}
 	

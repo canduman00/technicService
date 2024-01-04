@@ -2,6 +2,12 @@ package com.bilgeadam.technicService.model;
 
 public class SystemUser {
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	long id;
 	String username = "";
 	String password = "";

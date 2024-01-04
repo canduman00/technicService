@@ -2,7 +2,7 @@ package com.bilgeadam.technicService.model;
 
 import java.time.LocalDate;
 
-public class Sale_log {
+public class SaleLog {
 	long sale_id;
 	long user_id;
 	String credit_card;
@@ -11,11 +11,11 @@ public class Sale_log {
 	String product_note;
 	long price;
 	
-	public Sale_log() {
+	public SaleLog() {
 		
 	}
 
-	public Sale_log(long sale_id, long user_id, String credit_card, LocalDate date, String product_type,
+	public SaleLog(long sale_id, long user_id, String credit_card, LocalDate date, String product_type,
 			String product_note, long price) {
 		this.sale_id = sale_id;
 		this.user_id = user_id;
