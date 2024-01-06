@@ -15,7 +15,20 @@ public class SeConfig {
 	public SecurityFilterChain configure(HttpSecurity http, @Autowired AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		
 		//http.authorizeHttpRequests(customizer -> customizer.anyRequest().permitAll());
-		http.authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated());
+		//http.authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated());
+		
+		http.authorizeHttpRequests(customizer -> customizer
+				.requestMatchers("/booking/user/**").hasAuthority("ROLE_USER")
+				.requestMatchers("/booking/admin/**").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/sale/user/**").hasAuthority("ROLE_USER")
+				.requestMatchers("/sale/admin/**").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/proposal/user/**").hasAuthority("ROLE_USER")
+				.requestMatchers("proposal/admin/**").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("swagger-ui/**").hasAuthority("ROLE_ADMIN")
+				.anyRequest().permitAll());
+		
+		
+		
 		http.csrf(customizer -> customizer.disable());
 		http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
