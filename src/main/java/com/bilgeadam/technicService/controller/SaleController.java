@@ -22,8 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bilgeadam.technicService.model.Sale;
 import com.bilgeadam.technicService.repository.SaleRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(path="sale")
+@Tag(description="sale endpoint", name="Sale")
 public class SaleController {
 	
 	private SaleRepository saleRepo;
@@ -37,6 +41,7 @@ public class SaleController {
 	//sale - admin parts
 	
 	@PostMapping(path="/admin/save", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(description="successful save response 200, unsuccessful save response 500", summary="admins can create new sale by sending sale infos")
 	public ResponseEntity<String> save(Locale locale,@RequestBody Sale sale){
 		
 		try {
@@ -49,6 +54,7 @@ public class SaleController {
 	}
 	
 	@DeleteMapping(path="/admin/deletebyid/{id}")
+	@Operation(description="successful delete reponse 200, not found response 404, error response 500", summary="admins can delete sales by sending id")
 	public ResponseEntity<String> deletebyid(Locale locale, @PathVariable(name="id")long id){
 		try {
 			Object[] params = new Object[1];
@@ -69,11 +75,13 @@ public class SaleController {
 	//sale - public
 	
 	@GetMapping(path="/getall")
+	@Operation(summary="public can view all sales")
 	public ResponseEntity<List<Sale>> getall(){
 		return ResponseEntity.ok(saleRepo.getall());
 	}
 	
 	@GetMapping(path="/like")
+	@Operation(description="success response 200, not found respone 404, error response 500", summary="public can search sales with product name")
 	public ResponseEntity<Object> getlike(Locale locale,@RequestParam(name="product")String product_name){
 		try {
 			List<Sale> result = saleRepo.getlike(product_name);
@@ -94,6 +102,7 @@ public class SaleController {
 	//sale - user
 	
 	@PostMapping(path = "/user/buy", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="user can buy a product by sending sale_id and credit_card info")
 	public ResponseEntity<String> buy(Locale locale,@RequestBody Map<String, Object> json){
 		try {
 			Integer hold = (Integer) json.get("sale_id");

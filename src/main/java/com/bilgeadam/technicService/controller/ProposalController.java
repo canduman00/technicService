@@ -20,8 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bilgeadam.technicService.model.Proposals;
 import com.bilgeadam.technicService.repository.ProposalRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(path = "/proposal")
+@Tag(name="Proposal", description="proposal endpoint")
 public class ProposalController {
 	
 	private ProposalRepository proposalRepo;
@@ -35,6 +39,7 @@ public class ProposalController {
 	//proposal user parts
 	
 	@PostMapping(path = "/user/save", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="users can create proposal by sending proposal informations")
 	public ResponseEntity<String> save(Locale locale, @RequestBody Proposals proposal){
 		
 		try {
@@ -53,6 +58,7 @@ public class ProposalController {
 	}
 	
 	@GetMapping(path = "/user/getall", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="users can view all proposals under their usernames")
 	public ResponseEntity<Object> getuserall(Locale locale){
 		try {
 			List<Proposals> result = proposalRepo.getuserall();
@@ -69,6 +75,7 @@ public class ProposalController {
 	}
 	
 	@DeleteMapping(path = "/user/deletebyid/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+	@Operation(summary="users can delete their own proposal by sending proposal id")
 	public ResponseEntity<String> deletebyid(Locale locale,@PathVariable(name="id")long id){
 		try {
 			boolean result = proposalRepo.deletebyid(id);
@@ -88,11 +95,13 @@ public class ProposalController {
 	
 	//proposal admin parts
 	@GetMapping(path = "/admin/getall", produces=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="admins can view all proposals")
 	public ResponseEntity<List<Proposals>> getall(){
 		return ResponseEntity.ok(proposalRepo.getall());
 	}
 	
 	@GetMapping(path="/admin/getbyid/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="admins can get specific proposal by sending proposal id")
 	public ResponseEntity<Object> getbyid(Locale locale,@PathVariable(name="id")long id){
 		try {
 			
@@ -109,6 +118,7 @@ public class ProposalController {
 	}
 	
 	@PostMapping(path="/admin/update", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="admins can update proposal status by sending proposal id and new status")
 	public ResponseEntity<String> update(Locale locale,@RequestBody Proposals proposal){
 		try {
 			boolean result = proposalRepo.updatebyid(proposal);

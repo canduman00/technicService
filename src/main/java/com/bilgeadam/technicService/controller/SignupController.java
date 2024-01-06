@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bilgeadam.technicService.model.SystemUser;
 import com.bilgeadam.technicService.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping(path = "/signup")
+@io.swagger.v3.oas.annotations.tags.Tag(description = "sign up endpoint", name = "Sign Up")
 public class SignupController {
 	
 	private UserRepository userRepository;
@@ -28,6 +31,7 @@ public class SignupController {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(description = "successful sign up response 200, unsuccessful sign up response 500", summary="sign up function using username, password and email")
 	public ResponseEntity<String> signup(Locale locale,@RequestBody SystemUser systemUser){
 		try {
 			boolean result = userRepository.signup(systemUser);

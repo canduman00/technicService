@@ -23,8 +23,12 @@ import com.bilgeadam.technicService.model.Booking;
 import com.bilgeadam.technicService.repository.BookingRepository;
 import com.bilgeadam.technicService.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(path = "/booking")
+@Tag(name="Booking", description="booking endpoint")
 public class BookingController {
 	
 	private BookingRepository bookingRepo;
@@ -41,11 +45,13 @@ public class BookingController {
 	//Booking control - admin parts
 	
 	@GetMapping(path = "/admin/getall", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="admins can view all bookings")
 	public ResponseEntity<List<Booking>> getall(){
 		return ResponseEntity.ok(bookingRepo.getall());
 	}
 	
 	@GetMapping(path = "/admin/like", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="admins can view all bookings of a selected user by sending username")
 	public ResponseEntity<Object> getlike(Locale locale,@RequestParam(name="username")String username){
 		
 		try {
@@ -67,6 +73,7 @@ public class BookingController {
 	}
 	
 	@PostMapping(path = "/admin/updatebookingbyid/{id}", consumes = MediaType.TEXT_PLAIN_VALUE)
+	@Operation(summary="admins can update booking status by sending booking id and new status")
 	public ResponseEntity<String> updatestatus(Locale locale, @PathVariable(name="id")long booking_id, @RequestBody String status){
 		try {
 			boolean result;
@@ -95,6 +102,7 @@ public class BookingController {
 	//Booking - user parts
 	
 	@PostMapping(path = "/user/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="users can create new booking by sending booking info")
 	public ResponseEntity<String> save(Locale locale,@RequestBody Booking booking){
 		try {
 			return ResponseEntity.ok().body(bookingRepo.save(locale,booking));
@@ -112,6 +120,7 @@ public class BookingController {
 	}
 	
 	@GetMapping(path = "/user/mybookings", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary="users can view all bookings under their username")
 	public ResponseEntity<Object> getuserbookings(Locale locale) {
 		try {
 			String username = userRepo.getSessionName();
@@ -131,6 +140,7 @@ public class BookingController {
 	}
 	
 	@DeleteMapping(path = "/user/deletebyid/{id}")
+	@Operation(summary="users can delete their bookings by sending booking id")
 	public ResponseEntity<String> deletebyid(Locale locale, @PathVariable(name="id")long id){
 		try {
 			boolean result = bookingRepo.deletebyid(id);
